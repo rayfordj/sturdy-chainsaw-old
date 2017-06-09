@@ -1,222 +1,90 @@
-
-FROM docker.io/centos
-#FROM local/centos
+FROM docker.io/centos:7
 MAINTAINER RayfordJ <rjohnson@redhat.com>
 
-ENV container docker
+ENV LANG=en_US.utf8 \
+    container=oci
 
-EXPOSE  53  67  68  69  80  443  3000  3306  5910-5930  5432  8140  8443 
+EXPOSE 53  67  68  69  80  443  3000  3306  5910-5930  5432  8140  8443
 
-### Atomic Help File - Write in Markdown, it will be converted to man format at build time.
-### https://github.com/projectatomic/container-best-practices/blob/master/creating/help.adoc
-COPY help.md user_setup systemd_setup /tmp/
-
-
-
-RUN yum clean all && \
-    yum -y update && \
+RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical --setopt=tsflags=nodocs && \
     yum -y install  epel-release  centos-release-scl  && \
     yum -y install https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm && \
     yum -y install https://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm && \
 ## foreman installer packages
-    yum -y install  --setopt=tsflags=nodocs 			\
-			acl		\
+    yum -y install --setopt=tsflags=nodocs 		\
 			apr		\
 			apr-util		\
-			audit-libs		\
 			audit-libs-python		\
 			augeas-libs		\
-			basesystem		\
-			bash		\
-			bind-license		\
-			bind-utils  	 	\
-			binutils		\
-			bzip2-libs		\
-			ca-certificates		\
 			centos-logos		\
-			centos-release		\
-			centos-release-scl		\
-			centos-release-scl-rh		\
 			checkpolicy		\
-			chkconfig		\
-			coreutils		\
-			cpio		\
-			cracklib		\
-			cracklib-dicts		\
 			cronie		\
 			cronie-anacron		\
 			crontabs		\
-			cryptsetup-libs		\
-			curl		\
-			cyrus-sasl-lib		\
-			dbus		\
-			dbus-glib		\
-			dbus-libs		\
-			dbus-python		\
-			device-mapper		\
-			device-mapper-libs		\
-			diffutils		\
 			dmidecode		\
-			dracut		\
-			elfutils-libelf		\
-			elfutils-libs		\
-			epel-release		\
-			expat		\
 			facter		\
 			file		\
-			file-libs		\
-			filesystem		\
-			findutils		\
 			foreman		\
 			foreman-cli		\
 			foreman-debug		\
 			foreman-installer		\
 			foreman-postgresql		\
 			foreman-proxy		\
-			foreman-release		\
 			foreman-release-scl		\
 			foreman-selinux		\
 			freetype		\
-			gawk		\
-			gdbm		\
 			gettext		\
 			gettext-libs		\
-			glib2		\
-			glibc		\
-			glibc-common		\
-			gmp		\
-			gnupg2		\
-			gobject-introspection		\
-			gpgme		\
-			gpg-pubkey		\
-			grep		\
 			groff-base		\
 			grub2-efi		\
 			grub2-efi-modules		\
 			grub2-tools		\
-			gzip		\
-			hardlink		\
 			hiera		\
-			hostname		\
 			httpd		\
 			httpd-tools		\
 			hwdata		\
-			info		\
 			initscripts		\
 			ipmitool		\
 			iproute		\
 			iptables		\
-			iputils		\
-			keyutils-libs		\
-			kmod		\
-			kmod-libs		\
-			kpartx		\
-			krb5-libs		\
 			less		\
-			libacl		\
-			libassuan		\
-			libattr		\
-			libblkid		\
-			libcap		\
-			libcap-ng		\
 			libcgroup		\
-			libcom_err		\
 			libcroco		\
-			libcurl		\
-			libdb		\
-			libdb-utils		\
 			libeio		\
 			libev		\
-			libffi		\
-			libgcc		\
-			libgcrypt		\
 			libgomp		\
-			libgpg-error		\
-			libidn		\
 			libkadm5		\
 			libmnl		\
-			libmount		\
 			libnetfilter_conntrack		\
 			libnfnetlink		\
-			libpwquality		\
-			libselinux		\
 			libselinux-python		\
 			libselinux-ruby		\
 			libselinux-utils		\
-			libsemanage		\
 			libsemanage-python		\
-			libsepol		\
-			libss		\
-			libssh2		\
-			libstdc++		\
-			libtasn1		\
 			libunistring		\
-			libuser		\
-			libutempter		\
-			libuuid		\
-			libverto		\
-			libxml2		\
-			libxml2-python		\
 			libxslt		\
 			libyaml		\
-			lua		\
 			mailcap		\
 			make		\
 			mod_passenger		\
 			mod_ssl		\
 			mokutil		\
 			mtools		\
-			ncurses		\
-			ncurses-base		\
-			ncurses-libs		\
 			net-tools		\
-			nspr		\
-			nss		\
-			nss-softokn		\
-			nss-softokn-freebl		\
-			nss-sysinit		\
-			nss-tools		\
-			nss-util		\
 			OpenIPMI-modalias		\
-			openldap		\
 			openssl		\
-			openssl-libs		\
 			os-prober		\
-			p11-kit		\
-			p11-kit-trust		\
-			pam		\
 			passenger		\
-			passwd		\
 			pciutils		\
 			pciutils-libs		\
-			pcre		\
-			pinentry		\
-			pkgconfig		\
 			policycoreutils		\
 			policycoreutils-python		\
-			popt		\
 			postgresql		\
 			postgresql-libs		\
 			postgresql-server		\
-			procps-ng		\
-			pth		\
 			puppet		\
-			puppetlabs-release		\
 			puppet-server		\
-			pygobject3-base		\
-			pygpgme		\
-			pyliblzma		\
-			python		\
-			python-chardet		\
-			python-iniparse		\
 			python-IPy		\
-			python-kitchen		\
-			python-libs		\
-			python-pycurl		\
-			python-urlgrabber		\
-			pyxattr		\
-			qrencode-libs		\
-			readline		\
 			rh-ruby22-ruby		\
 			rh-ruby22-rubygem-bigdecimal		\
 			rh-ruby22-rubygem-bundler		\
@@ -232,11 +100,6 @@ RUN yum clean all && \
 			rh-ruby22-ruby-irb		\
 			rh-ruby22-ruby-libs		\
 			rh-ruby22-runtime		\
-			rootfiles		\
-			rpm		\
-			rpm-build-libs		\
-			rpm-libs		\
-			rpm-python		\
 			rsync		\
 			ruby		\
 			ruby-augeas		\
@@ -313,22 +176,14 @@ RUN yum clean all && \
 			sclo-ror42-rubygem-tzinfo		\
 			sclo-ror42-runtime		\
 			scl-utils		\
-			sed		\
 			selinux-policy		\
 			selinux-policy-targeted		\
 			setools-libs		\
-			setup		\
-			shadow-utils		\
-			shared-mime-info		\
 			shim		\
-			sqlite		\
 			sudo		\
 			syslinux		\
-			systemd		\
-			systemd-libs		\
 			systemd-sysv		\
 			sysvinit-tools		\
-			tar		\
 			tcp_wrappers-libs		\
 			tfm-rubygem-activerecord-session_store		\
 			tfm-rubygem-addressable		\
@@ -393,67 +248,34 @@ RUN yum clean all && \
 			tfm-rubygem-x-editable-rails		\
 			tfm-runtime		\
 			tftp-server		\
-			tzdata		\
-			ustr		\
-			util-linux		\
-			vim-minimal		\
 			virt-what		\
 			wget		\
 			which		\
-			xinetd		\
-			xz		\
-			xz-libs		\
-			yum		\
-			yum-metadata-parser		\
-			yum-plugin-fastestmirror		\
-			yum-plugin-ovl		\
-			yum-utils		\
-			zlib						&& \
+			xinetd && \
 # VERSION is missing even though sclo-ror42 package claims it...
 # `foreman-installer` fails without its existence...
     mkdir -p /opt/rh/sclo-ror42/root/usr/share/gems/gems/mail-2.6.1/      && \
     touch /opt/rh/sclo-ror42/root/usr/share/gems/gems/mail-2.6.1/VERSION  && \
 # foreman installer
 #    yum -y install --setopt=tsflags=nodocs foreman-installer && \
-### Add your package needs to this installation line
-    yum -y install --setopt=tsflags=nodocs golang-github-cpuguy83-go-md2man && \
-### help file markdown to man conversion
-    go-md2man -in /tmp/help.md -out /help.1 && yum -y remove golang-github-cpuguy83-go-md2man && \
     yum clean all 
 
+USER 26
+RUN initdb -D /var/lib/pgsql/data
+USER 0
 
 #RUN foreman-installer [ -s | --skip-checks-i-know-better ]
-RUN foreman-installer -s
+RUN foreman-installer -h
 
 ##  ^--- this is currently failing (even manually from a shell in the
 ##      container) if the correct DNS mapping FQDN->IP isn't set...
 
-
-### Setup user for build execution and application runtime
-### Running as 'root' [for now]
-ENV APP_ROOT=/opt/app-root \
-    USER_NAME=root \
-    #USER_NAME=default \
-    USER_UID=0
-    #USER_UID=10001
-ENV APP_HOME=${APP_ROOT}/src  PATH=$PATH:${APP_ROOT}/bin
-RUN mkdir -p ${APP_HOME} ${APP_ROOT}/etc
-COPY bin/ ${APP_ROOT}/bin/
-RUN chmod -R ug+x ${APP_ROOT}/bin ${APP_ROOT}/etc /tmp/user_setup /tmp/systemd_setup && \
-    /tmp/user_setup
-
-####### Add app-specific needs below. #######
-### systemd requirements - to cleanly shutdown systemd, use SIGRTMIN+3
 STOPSIGNAL SIGRTMIN+3
-ENV container=docker
-RUN systemctl set-default multi-user.target && \
-#    systemctl enable httpd crond && \
-    /tmp/systemd_setup
+RUN MASK_JOBS="sys-fs-fuse-connections.mount getty.target systemd-initctl.socket systemd-logind.service ipmievd.service" && \
+    systemctl mask ${MASK_JOBS} && \
+    for i in ${MASK_JOBS}; do find /usr/lib/systemd/ -iname $i | grep ".wants" | xargs rm -f; done && \
+    rm -f /etc/fstab && \
+    systemctl set-default multi-user.target && \
+    systemctl enable postgresql
 
-### Containers should NOT run as root as a good practice
-### Running as 'root' [for now]
-USER ${USER_UID}
-WORKDIR ${APP_ROOT}
-### arbitrary uid recognition at runtime - for OpenShift deployments
-RUN sed "s@${USER_NAME}:x:${USER_UID}:@${USER_NAME}:x:\${USER_ID}:@g" /etc/passwd > ${APP_ROOT}/etc/passwd.template
 CMD [ "/sbin/init" ]
