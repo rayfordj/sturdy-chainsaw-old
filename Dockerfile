@@ -10,7 +10,7 @@ RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Cri
     yum -y install epel-release centos-release-scl && \
     yum -y install https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm && \
     yum -y install https://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm && \
-## foreman installer packages
+## katello/foreman installer packages
     yum -y install --setopt=tsflags=nodocs \
       foreman \
       foreman-cli \
@@ -18,7 +18,8 @@ RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Cri
       foreman-installer	\
       foreman-postgresql \
       foreman-proxy	\
-      foreman-selinux && \
+      foreman-selinux  \
+      katello && \
 # VERSION is missing even though sclo-ror42 package claims it...
 # `foreman-installer` fails without its existence...
     mkdir -p /opt/rh/sclo-ror42/root/usr/share/gems/gems/mail-2.6.1 && \
@@ -32,6 +33,6 @@ RUN MASK_JOBS="sys-fs-fuse-connections.mount getty.target systemd-initctl.socket
     rm -f /etc/fstab && \
     systemctl set-default multi-user.target
 
-# RUN foreman-installer
+# RUN foreman-installer --scenario katello # --foreman-admin-password  "${ADMINPASSWORD}" 
 
 CMD [ "/sbin/init" ]
