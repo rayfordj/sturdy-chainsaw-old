@@ -17,6 +17,8 @@ RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Cri
       foreman-cli \
       foreman-debug	\
       foreman-installer	\
+      foreman-libvirt \
+      foreman-ovirt \
       foreman-postgresql \
       foreman-proxy	\
       foreman-selinux  \
